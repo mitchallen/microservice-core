@@ -1,0 +1,20 @@
+{
+  "name": "@mitchallen/microservice-core",
+  "version": "0.1.0",
+  "description": "core module for microservices",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive --timeout 5000",
+    "//": "To use: npm run test-nodemon (assumes global location of mocha)",
+    "test-nodemon": "nodemon /usr/local/bin/mocha --timeout 5000"
+  },
+  "author": "Mitch Allen <npm@mitchallen.com> (http://mitchallen.com)",
+  "license": "ISC",
+  "devDependencies": {
+    "should": "^10.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0"
+  }
+}
