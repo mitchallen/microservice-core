@@ -42,6 +42,11 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 ## Version History
 
+#### Version 0.1.1 release notes
+
+* Ran jslint against index.js
+* Added bitbucket to repo listing
+
 #### Version 0.1.0 release notes
 
 * Initial release
