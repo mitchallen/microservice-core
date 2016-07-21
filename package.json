@@ -8,6 +8,10 @@
     "//": "To use: npm run test-nodemon (assumes global location of mocha)",
     "test-nodemon": "nodemon /usr/local/bin/mocha --timeout 5000"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/mitchallen/microservice-core.git"
+  },
   "author": "Mitch Allen <npm@mitchallen.com> (http://mitchallen.com)",
   "license": "ISC",
   "devDependencies": {
