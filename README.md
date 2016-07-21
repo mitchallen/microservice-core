@@ -17,6 +17,12 @@ You must use __npm__ __2.7.0__ because of the scoped package name.
 
 This core module is not meant to be used standalone. It should be used as a base for providing a link to a database.
 
+### Example
+
+You can find a working example here:
+
+* [https://bitbucket.org/mitchallen/microservice-demo-table-list](https://bitbucket.org/mitchallen/microservice-demo-table-list)
+
 * * *
 
 ## Testing
@@ -46,6 +52,7 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 * Ran jslint against index.js
 * Added bitbucket to repo listing
+* Added pointer to working example in README
 
 #### Version 0.1.0 release notes
 
