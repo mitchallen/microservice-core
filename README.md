@@ -50,7 +50,7 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 #### Version 0.1.2 release notes
 
-* Added .npmigore to filter out test folder, etc
+* Added .npmignore to filter out test folder, etc
 
 #### Version 0.1.1 release notes
 
