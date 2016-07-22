@@ -72,5 +72,5 @@ var options = {
 // Pass the options to microservice-core
 module.exports = require('@mitchallen/microservice-core')(options);
 
-// microservice should not be listening on the port
+// microservice should now be listening on the port
 // Test with Chrome browser or curl command
