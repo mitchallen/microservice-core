@@ -4,6 +4,10 @@
 A node.js core module for creating microservices
 ------------------------------------------------
 
+The purpose of this module is to help you create a microservice - an HTTP endpoint that only does one thing.
+
+* * *
+
 ## Installation
 
 You must use __npm__ __2.7.0__ or higher because of the scoped package name.
@@ -13,9 +17,35 @@ You must use __npm__ __2.7.0__ or higher because of the scoped package name.
   
 * * *
 
+## What is a Microservice?
+
+*"Microservices is an approach to application development in which a large application is built as a suite of modular services. Each module supports a specific business goal and uses a simple, well-defined interface to communicate with other modules."* - [Margaret Rouse](http://searchitoperations.techtarget.com/definition/microservices)
+
+*"In short, the microservice architectural style is an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API. These services are built around business capabilities and independently deployable by fully automated deployment machinery. There is a bare minimum of centralized management of these services, which may be written in different programming languages and use different data storage technologies."* - [Martin Fowler](http://martinfowler.com/articles/microservices.html)
+
+### The basic idea
+
+A large monolithic Web site is basically a [God object](https://en.wikipedia.org/wiki/God_object).  Most developers will tell you that such objects are bad. But then they go back to work on their giant Web app that takes 8 hours to compile and requires bringing the system down all night to upgrade. It may contain a dozen or even a hundred HTTP endpoints that are intertwined and difficult to maintain or deploy. If any of them break they may take down the whole site.  To work on any part of the system developer may need access to *all* of the source code.
+
+A microservice on the other has only *one* endpoint (like: *example.com/api/login*).  It's small, self-contained, easy to maintain and can be deployed in seconds. If it is being deployed or breaks, it should have no effect on the other endpoints or the site. Developers can be restricted to only work on the code for the microservices they are assigned.
+
+See also:
+
+* [Fred George: Challenges in Implementing MicroServices (video)](https://www.youtube.com/watch?v=yPf5MfOZPY0)
+* [“It’s Not Just Microservices”: Fred George Discusses Technology, Process and Organisation Inhibitors](https://www.infoq.com/news/2016/02/not-just-microservices)
+* [Microservices without the Servers (Amazon)](https://aws.amazon.com/blogs/compute/microservices-without-the-servers/)
+* [Adopting Microservices at Netflix: Lessons for Architectural Design](https://www.nginx.com/blog/microservices-at-netflix-architectural-best-practices/)
+* [Yelp Engineering: Using Services to Break Down a Monolith](https://www.infoq.com/news/2015/03/yelp-soa-break-monoliths)
+* [Scaling Gilt: from Monolithic Ruby Application to Distributed Scala Micro-Services Architecture](https://www.infoq.com/presentations/scale-gilt)
+* [How we ended up with microservices (Soundcloud)](http://philcalcado.com/2015/09/08/how_we_ended_up_with_microservices.html)
+
+* * *
+
 ## Usage
 
-This core module can be used as a basis for a simple REST service or extended to provide REST + database access.
+This core module can be used as a basis for a simple REST microservice or extended to provide REST + database access.
+
+It works by letting you wrap an __[ExpressJS](https://expressjs.com) router__ HTTP method in a service object and passing that to the core object. The core object does all the work of setting up ExpressJS and lets you just worry about the one microservice. 
 
 ### Define a Service Object
 
@@ -64,7 +94,28 @@ The port to listen on.
 
 #### service.method
 
-# TODO
+Set the __method__ to a function that takes one parameter (*info*).
+
+    method: function (info) {
+
+        var router = info.router;
+
+        router.[get,post,put,patch,delete] ... { 
+            ... 
+        };
+
+        return router;
+    }
+
+The *info* parameter contains a pointer to a __router__. The router returned is an __ExpressJS router__. You can find out more about it here:
+
+[https://expressjs.com/en/guide/routing.html](https://expressjs.com/en/guide/routing.html)
+
+Once you have a handle to the router you can use it to define an endpoint for handling HTTP method requests (get, post, etc.).  See the router documentation for more info.
+
+Finally, your method must return the router that it was passed. That's because internally your method is being called by the __ExpressJS__ __use()__ method. That method will expect a router to be returned.
+
+* * *
     
 ### Attach the Service Object to an Option Object
 
@@ -74,16 +125,21 @@ The name on the left must be called __service__.
     	service: service
     }
 
-
 ### Pass the Options to the microservice-core module:
 
+    require('@mitchallen/microservice-core')(options);
+    
+Or if you want to export the returned value:
+
     module.exports = require('@mitchallen/microservice-core')(options);
+
+The value returned is a pointer to the express modules server. If you are familiar with express, it's the value returned by __app.listen__. You don't need to actually return anything. It was handy for me to use the __close__ method in the unit tests.
 
 * * *
 
 ### Heartbeat Example
 
-This example can be found in the examples/hearbeat folder in the git repo.
+This example can be found in the __examples / heartbeat__ folder in the git repo.
 
 #### Step 1: Create a project folder
 
@@ -92,13 +148,16 @@ Open up a terminal window and do the following:
     $ mkdir heartbeat
     $ cd heartbeat 
     
-#### Step 2: Setup an Installation
+#### Step 2: Setup and Installation
 
-Follow thing __npm init / install__ instructions above
+You must use __npm__ __2.7.0__ or higher because of the scoped package name.
+
+    $ npm init
+    $ npm install @mitchallen/microservice-core --save
 
 ### Step 3: Create index.js
 
-Using your favorite text editor, create a file called index.js in the root of the project folder.
+Using your favorite text editor, create a file called __index.js__ in the root of the project folder.
 
 Cut and paste the contents below into it.
 
@@ -176,6 +235,8 @@ To test:
 
         http://localhost:8001/v1/heartbeat
         
+4. To stop the service, in the original window press __Ctrl-C__.
+        
 * * *
 
 ### Database Example
@@ -213,18 +274,18 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 #### Version 0.1.3 release notes
 
-* Added examples/heartbeat demo
-* Updated README with example
+* Added __examples / heartbeat__ demo
+* Updated __README__ with example and background info
 
 #### Version 0.1.2 release notes
 
-* Added .npmignore to filter out test folder, etc
+* Added __.npmignore__ to filter out test folder, etc
 
 #### Version 0.1.1 release notes
 
-* Ran jslint against index.js
-* Added bitbucket to repo listing
-* Added pointer to working example in README
+* Ran __jslint__ against __index.js__
+* Added __bitbucket__ to repo listing
+* Added pointer to working example in __README__
 
 #### Version 0.1.0 release notes
 
