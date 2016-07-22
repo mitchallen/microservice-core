@@ -18,8 +18,10 @@ From your projects root folder, execute the following at the command line:
 
 ### Test the app using curl commands
 
-TODO
+    curl -i -X GET -H "Content-Type: application/json" http://localhost:8001/v1/heartbeat
 
 ### Test the app in the browser
 
-TODO
+    http://localhost:8001/v1/heartbeat
+
+### To stop the test app, in the original console window press __Ctrl-C__.
