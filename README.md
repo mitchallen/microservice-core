@@ -48,6 +48,10 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 ## Version History
 
+#### Version 0.1.2 release notes
+
+* Added .npmigore to filter out test folder, etc
+
 #### Version 0.1.1 release notes
 
 * Ran jslint against index.js
