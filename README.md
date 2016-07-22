@@ -99,6 +99,7 @@ Set the __method__ to a function that takes one parameter (*info*).
     method: function (info) {
 
         var router = info.router;
+        var connection = info.connection;	// database option
 
         router.[get,post,put,patch,delete] ... { 
             ... 
@@ -107,11 +108,79 @@ Set the __method__ to a function that takes one parameter (*info*).
         return router;
     }
 
+##### info.router
+
 The *info* parameter contains a pointer to a __router__. The router returned is an __ExpressJS router__. You can find out more about it here:
 
 [https://expressjs.com/en/guide/routing.html](https://expressjs.com/en/guide/routing.html)
 
 Once you have a handle to the router you can use it to define an endpoint for handling HTTP method requests (get, post, etc.).  See the router documentation for more info.
+
+##### info.connection
+
+To allow for methods that can access a database an __info.connection__ value may also be returned.
+
+For example, this is how you would define a service method for use with [@mitchallen/microservice-dynamo](https://www.npmjs.com/package/@mitchallen/microservice-dynamo):
+
+    method: function(info) {
+    
+        var router = info.router,
+            dynamo = info.connection.dynamo;
+
+        router.get( '/table/list', function (req, res) {
+
+            dynamo.listTables(function (err, data) {
+                if( err ) {
+                    console.error(err);
+                    res
+                      .status(500)
+                      .send(err);
+                } else {
+                    if( info.verbose ) {
+                      console.log('listTables:', data);
+                    }
+                    res.json(data);
+                }
+            });
+        });
+        return router;
+    }
+    
+To give you and idea of how it works, this is what my dynamo module does internally to add the connection to the method call:
+
+    /**
+      Module: @mitchallen/microservice-dynamo
+      Author: Mitch Allen
+    */
+
+    /*jslint es6 */
+
+    "use strict";
+
+    module.exports = function (spec) {
+
+      let AWS = require('aws-sdk');
+      let dynamoConfig = require('./dynamo-config');
+      let credentials = dynamoConfig.credentials;
+
+      AWS.config.update(credentials);
+
+      let connection = {
+        dynamo: new AWS.DynamoDB(),
+        docClient: new AWS.DynamoDB.DocumentClient()
+      };
+
+      let options = {
+        service: spec,
+        connection: connection
+     };
+
+      return require('@mitchallen/microservice-core')(options);
+    };
+    
+The original service object (passed into the constructor as __spec__) is added to the __options__ object to pass to the core.  But the __connection__ property is also filled with information specific to the Amazon Dynamo connection so that your method can also use that.
+
+##### return value
 
 Finally, your method must return the router that it was passed. That's because internally your method is being called by the __ExpressJS__ __use()__ method. That method will expect a router to be returned.
 
@@ -271,6 +340,10 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * * *
 
 ## Version History
+
+#### Version 0.1.4 release notes
+
+* Added more info to the __README__
 
 #### Version 0.1.3 release notes
 
