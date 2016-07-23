@@ -1,7 +1,7 @@
 {
   "name": "heartbeat",
-  "version": "1.0.1",
-  "description": "examples / hearbeat ===================",
+  "version": "1.0.2",
+  "description": "examples / heartbeat",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mitchallen/microservice-core": "^0.2.0"
+    "@mitchallen/microservice-core": "^0.2.1"
   }
 }
