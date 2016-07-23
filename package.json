@@ -1,6 +1,6 @@
 {
   "name": "@mitchallen/microservice-core",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "core module for microservices",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,8 @@
   "author": "Mitch Allen <npm@mitchallen.com> (http://mitchallen.com)",
   "license": "ISC",
   "devDependencies": {
-    "should": "^10.0.0"
+    "should": "^10.0.0",
+    "supertest": "^1.2.0"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

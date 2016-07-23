@@ -49,10 +49,19 @@ module.exports = function (spec) {
             console.log('%s: Received %s - terminating Node server ...',
                     new Date(Date.now()), sig);
         }
-        server.close();
-        process.exit(1);
+        if (server) {
+            server.close();
+        }
         console.log('%s: Node server stopped.', new Date(Date.now()));
+        process.exit(1);
     }
+
+    process.on('uncaughtException', function (err) {
+        if (err.errno === 'EADDRINUSE') {
+            console.log("EADDRINUSE: port in use? " + service.port);
+        }
+        terminator();
+    });
 
     //  Process on exit and signals.
     process.on('exit', function () {
@@ -67,5 +76,7 @@ module.exports = function (spec) {
             });
         });
 
-    return server;
+    return {
+        server: server
+    };
 };

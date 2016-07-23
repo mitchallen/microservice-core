@@ -202,7 +202,20 @@ Or if you want to export the returned value:
 
     module.exports = require('@mitchallen/microservice-core')(options);
 
-The value returned is a pointer to the express modules server. If you are familiar with express, it's the value returned by __app.listen__. You don't need to actually return anything. It was handy for me to use the __close__ method in the unit tests.
+#### Return Value
+
+The object returned by the module contains a __server__ field: 
+
+    { server: server }
+
+
+It's a pointer to the express modules server. If you are familiar with express, it's the value returned by __app.listen__. You don't need to actually return anything. It was handy for me to use the __close__ method in the unit tests so I wouldn't get port-in-use errors. It's also used internally when the module unexpectedly terminates.  
+
+Here is an example of how it to create it, then use the __server__ return value to close it (checking for null omitted for brevity):
+
+    var obj = require('@mitchallen/microservice-core')(options);
+    var server = obj.server;
+    server.close();
 
 * * *
 
@@ -340,6 +353,13 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * * *
 
 ## Version History
+
+#### Version 0.2.0 release notes
+
+* Bumped minor version number because broke backward compatibility
+  * Module now returns __{ server: server }__ instead of just __server__.
+* Added get url test
+* Added additional error handling
 
 #### Version 0.1.4 release notes
 
