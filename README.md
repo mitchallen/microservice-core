@@ -354,6 +354,10 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 ## Version History
 
+#### Version 0.2.1 release notes
+
+* Fixed issue with uncaught exception handler interfering with unit tests
+
 #### Version 0.2.0 release notes
 
 * Bumped minor version number because broke backward compatibility
