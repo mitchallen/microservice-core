@@ -44,7 +44,9 @@ module.exports = function (spec) {
         }
     );
 
-    function terminator(sig) {
+    function terminator(info) {
+        let sig = info.signal;
+        let kill = info.kill;
         if (typeof sig === "string") {
             console.log('%s: Received %s - terminating Node server ...',
                     new Date(Date.now()), sig);
@@ -52,27 +54,45 @@ module.exports = function (spec) {
         if (server) {
             server.close();
         }
-        console.log('%s: Node server stopped.', new Date(Date.now()));
-        process.exit(1);
+        if( kill ) {
+            console.log('%s: Node server stopped.', new Date(Date.now()));
+            process.exit(1);
+        }
     }
 
     process.on('uncaughtException', function (err) {
         if (err.errno === 'EADDRINUSE') {
             console.log("EADDRINUSE: port in use? " + service.port);
         }
-        terminator();
+        if (typeof err.errno === "string") {
+            // console.log("ERROR:", err.errno);
+        }
+        if (typeof err.message === "string") {
+            // console.log("ERROR MESSAGE:", err.message);
+        }
+        // console.log(err);
+        terminator( {
+            signal: err.errno,
+            kill: false     // interfering with unit tests
+        });
     });
 
     //  Process on exit and signals.
     process.on('exit', function () {
-        terminator();
+        terminator( {
+            // signal: '[EXIT]',
+            kill: false
+        } );
     });
 
     ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS',
             'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM']
         .forEach(function (element, index, array) {
             process.on(element, function () {
-                terminator(element);
+                terminator( {
+                    signal: element,
+                    kill: true
+                } );
             });
         });
 

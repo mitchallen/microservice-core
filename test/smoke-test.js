@@ -30,17 +30,18 @@ describe('microservice core smoke test', function() {
                     return router;
                 }
             }
-        }
+        };
         
         var modulePath = '../index';
         // Needed for cleanup between tests
         delete require.cache[require.resolve(modulePath)];
-        var obj = require(modulePath)(options);
-        should.exist(obj);
-        var server = obj.server;
+        var retObj = require(modulePath)(options);
+        should.exist(retObj);
+        var server = retObj.server;
         should.exist(server);
         server.close(done);
     });
+
 
     it('should get url', function(done) {
 
@@ -68,14 +69,14 @@ describe('microservice core smoke test', function() {
                     return router;
                 }
             }
-        }
+        };
         
         var modulePath = '../index';
         // Needed for cleanup between tests
         delete require.cache[require.resolve(modulePath)];
-        var obj = require(modulePath)(options);
-        should.exist(obj);
-        var server = obj.server;
+        var retObj = require(modulePath)(options);
+        should.exist(retObj);
+        var server = retObj.server;
         should.exist(server);
         
         var testUrl =  prefix + path;
@@ -92,4 +93,5 @@ describe('microservice core smoke test', function() {
                 server.close(done);
             });
     });
+
 });
