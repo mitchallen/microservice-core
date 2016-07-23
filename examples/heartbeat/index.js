@@ -36,7 +36,7 @@ var service = {
     apiVersion: process.env.API_VERSION || '/v1',
 
     // Get the port to listen on from env or use default if null
-    port: process.env.HEARTBEAT_PORT || 8100,
+    port: process.env.HEARTBEAT_PORT || 8001,
 
     // microservice-core will pass an object containing an ExpressJS router.
     // Use the router to define HTTP handlers
