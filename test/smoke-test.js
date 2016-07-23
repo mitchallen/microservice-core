@@ -43,6 +43,35 @@ describe('microservice core smoke test', function() {
     });
 
 
+   it('should fail gracefully if port in use', function(done) {
+
+        var options = {
+            service: {
+                name: testName,
+                version: testVersion,
+                verbose: verbose,
+                port: testPort,
+                apiVersion: "/test1",
+                method: function(info) {
+                    var router = info.router;
+                    return router;
+                }
+            }
+        };
+        
+        var modulePath = '../index';
+        // Needed for cleanup between tests
+        delete require.cache[require.resolve(modulePath)];
+        var retObj = require(modulePath)(options);
+        should.exist(retObj);
+        var server = retObj.server;
+        should.exist(server);
+        // Create second server on same port
+        // Will print benign port in use error to console
+        require(modulePath)(options);  
+        server.close(done);
+    });
+
     it('should get url', function(done) {
 
         let prefix = "/test1";

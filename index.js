@@ -10,12 +10,10 @@
 module.exports = function (spec) {
 
     let service = spec.service;
-
     let express = require('express');
     let parser = require("body-parser");
     let app = express();
     let router = new express.Router();
-
     let info = {
         router: router,
         connection: spec.connection
@@ -36,65 +34,23 @@ module.exports = function (spec) {
         function () {
             if (service.verbose) {
                 console.log(
+                    "%s, %s: listening on port %s",
                     service.name,
                     service.version,
-                    'listening on port ' + service.port
+                    service.port
                 );
             }
         }
-    );
-
-    function terminator(info) {
-        let sig = info.signal;
-        let kill = info.kill;
-        if (typeof sig === "string") {
-            console.log('%s: Received %s - terminating Node server ...',
-                    new Date(Date.now()), sig);
-        }
-        if (server) {
-            server.close();
-        }
-        if( kill ) {
-            console.log('%s: Node server stopped.', new Date(Date.now()));
-            process.exit(1);
-        }
-    }
-
-    process.on('uncaughtException', function (err) {
+    ).on('error', function (err) {
         if (err.errno === 'EADDRINUSE') {
-            console.log("EADDRINUSE: port in use? " + service.port);
+            console.error(
+                "### ERROR: %s, %s: port %s in use",
+                service.name,
+                service.version,
+                err.port
+            );
         }
-        if (typeof err.errno === "string") {
-            // console.log("ERROR:", err.errno);
-        }
-        if (typeof err.message === "string") {
-            // console.log("ERROR MESSAGE:", err.message);
-        }
-        // console.log(err);
-        terminator( {
-            signal: err.errno,
-            kill: false     // interfering with unit tests
-        });
     });
-
-    //  Process on exit and signals.
-    process.on('exit', function () {
-        terminator( {
-            // signal: '[EXIT]',
-            kill: false
-        } );
-    });
-
-    ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS',
-            'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM']
-        .forEach(function (element, index, array) {
-            process.on(element, function () {
-                terminator( {
-                    signal: element,
-                    kill: true
-                } );
-            });
-        });
 
     return {
         server: server

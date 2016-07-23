@@ -354,6 +354,11 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 ## Version History
 
+#### Version 0.2.2 release notes
+
+* Added port in use test
+* Removed process signal handling 
+
 #### Version 0.2.1 release notes
 
 * Fixed issue with uncaught exception handler interfering with unit tests
