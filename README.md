@@ -342,6 +342,7 @@ To test the module, go to the root folder and type:
 ## Repo(s)
 
 * [bitbucket.org/mitchallen/microservice-core.git](https://bitbucket.org/mitchallen/microservice-core.git)
+* [github.com/mitchallen/microservice-core.git](https://github.com/mitchallen/microservice-core.git)
 
 * * *
 
