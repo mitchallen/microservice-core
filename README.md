@@ -356,6 +356,10 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 #### Version 0.3.1
 
+* Updated example to use latest package
+
+#### Version 0.3.0
+
 * Bumped minor version number because broke backward compatibility
 * Must now pass options to __Service__ method instead of module.
 

@@ -17,9 +17,12 @@
        http://localhost:8001/v1/heartbeat
 */
 
-/*jslint es6 */
+/*jshint node: true */
+/*jshint esversion: 6 */
 
 "use strict";
+
+var core = require('@mitchallen/microservice-core');
 
 // Define a Service object
 var service = {
@@ -69,8 +72,8 @@ var options = {
     service: service
 };
 
-// Pass the options to microservice-core
-module.exports = require('@mitchallen/microservice-core')(options);
+// Pass the options to microservice-core Service method
+module.exports = core.Service(options);
 
 // microservice should now be listening on the port
 // Test with Chrome browser or curl command

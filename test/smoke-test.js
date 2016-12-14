@@ -4,6 +4,9 @@
     Author: Mitch Allen
 */
 
+/*jshint node: true */
+/*jshint esversion: 6 */
+
 "use strict";
 
 var request = require('supertest'),
