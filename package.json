@@ -1,6 +1,6 @@
 {
   "name": "@mitchallen/microservice-core",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "core module for microservices",
   "main": "index.js",
   "scripts": {

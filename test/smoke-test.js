@@ -8,6 +8,7 @@
 
 var request = require('supertest'),
     should = require('should'),
+    modulePath = "../index",
     testName = require("../package").name,
     testVersion = require("../package").version,
     verbose = process.env.SERVICE_VERBOSE || false,
@@ -15,6 +16,30 @@ var request = require('supertest'),
     testHost = "http://localhost:" + testPort;
 
 describe('microservice core smoke test', function() {
+
+    var _module = null;
+
+    before(function(done) {
+        // Call before all tests
+        delete require.cache[require.resolve(modulePath)];
+        _module = require(modulePath);
+        done();
+    });
+
+    after(function(done) {
+        // Call after all tests
+        done();
+    });
+
+    beforeEach(function(done) {
+        // Call before each test
+        done();
+    });
+
+    afterEach(function(done) {
+        // Call after eeach test
+        done();
+    });
 
     it('should not throw an error', function(done) {
 
@@ -31,11 +56,8 @@ describe('microservice core smoke test', function() {
                 }
             }
         };
-        
-        var modulePath = '../index';
-        // Needed for cleanup between tests
-        delete require.cache[require.resolve(modulePath)];
-        var retObj = require(modulePath)(options);
+    
+        var retObj =_module.Service(options);
         should.exist(retObj);
         var server = retObj.server;
         should.exist(server);
@@ -59,16 +81,13 @@ describe('microservice core smoke test', function() {
             }
         };
         
-        var modulePath = '../index';
-        // Needed for cleanup between tests
-        delete require.cache[require.resolve(modulePath)];
-        var retObj = require(modulePath)(options);
+        var retObj =_module.Service(options);
         should.exist(retObj);
         var server = retObj.server;
         should.exist(server);
         // Create second server on same port
         // Will print benign port in use error to console
-        require(modulePath)(options);  
+        _module.Service(options);  
         server.close(done);
     });
 
@@ -100,10 +119,7 @@ describe('microservice core smoke test', function() {
             }
         };
         
-        var modulePath = '../index';
-        // Needed for cleanup between tests
-        delete require.cache[require.resolve(modulePath)];
-        var retObj = require(modulePath)(options);
+        var retObj =_module.Service(options);
         should.exist(retObj);
         var server = retObj.server;
         should.exist(server);

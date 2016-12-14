@@ -3,17 +3,20 @@
     author: Mitch Allen
 */
 
-/*jslint es6 */
+/*jshint node: true */
+/*jshint esversion: 6 */
 
 "use strict";
 
-module.exports = function (spec) {
+let express = require('express');
+let parser = require("body-parser");
+let app = express();
+let router = new express.Router();
+
+module.exports.Service = function (spec) {
 
     let service = spec.service;
-    let express = require('express');
-    let parser = require("body-parser");
-    let app = express();
-    let router = new express.Router();
+
     let info = {
         router: router,
         connection: spec.connection

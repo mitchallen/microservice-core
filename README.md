@@ -146,16 +146,11 @@ For example, this is how you would define a service method for use with [@mitcha
         return router;
     }
     
-To give you and idea of how it works, this is what my dynamo module does internally to add the connection to the method call:
-
-    /**
-      Module: @mitchallen/microservice-dynamo
-      Author: Mitch Allen
-    */
-
-    /*jslint es6 */
+To give you and idea of how it works, this is what a dynamo module could look like:
 
     "use strict";
+    
+    var core = require('@mitchallen/microservice-core');
 
     module.exports = function (spec) {
 
@@ -175,7 +170,7 @@ To give you and idea of how it works, this is what my dynamo module does interna
         connection: connection
      };
 
-      return require('@mitchallen/microservice-core')(options);
+      return core.Service(options);
     };
     
 The original service object (passed into the constructor as __spec__) is added to the __options__ object to pass to the core.  But the __connection__ property is also filled with information specific to the Amazon Dynamo connection so that your method can also use that.
@@ -194,17 +189,17 @@ The name on the left must be called __service__.
     	service: service
     }
 
-### Pass the Options to the microservice-core module:
+### Pass the Options to the __Service__ method:
 
-    require('@mitchallen/microservice-core')(options);
+    core.Service(options);
     
 Or if you want to export the returned value:
 
-    module.exports = require('@mitchallen/microservice-core')(options);
+    module.exports = core.Service(options);
 
 #### Return Value
 
-The object returned by the module contains a __server__ field: 
+The object returned by the method contains a __server__ field: 
 
     { server: server }
 
@@ -213,7 +208,9 @@ It's a pointer to the express modules server. If you are familiar with express, 
 
 Here is an example of how it to create it, then use the __server__ return value to close it (checking for null omitted for brevity):
 
-    var obj = require('@mitchallen/microservice-core')(options);
+    var core = require('@mitchallen/microservice-core');
+    // ... set options
+    var obj = core.Service(options);    
     var server = obj.server;
     server.close();
 
@@ -246,6 +243,8 @@ Cut and paste the contents below into it.
     /*jslint es6 */
 
     "use strict";
+    
+    var core = require('@mitchallen/microservice-core');
 
     // Define a Service object
     var service = {
@@ -295,8 +294,8 @@ Cut and paste the contents below into it.
       service: service
     };
 
-    // Pass the options to microservice-core
-    module.exports = require('@mitchallen/microservice-core')(options);
+    // Pass the options to Service
+    module.exports = core.Service(options);
 
     // microservice should now be listening on the port
     // Test with Chrome browser or curl command
@@ -355,6 +354,11 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 ## Version History
 
+#### Version 0.3.1
+
+* Bumped minor version number because broke backward compatibility
+* Must now pass options to __Service__ method instead of module.
+
 #### Version 0.2.2 release notes
 
 * Added port in use test
@@ -367,7 +371,7 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 #### Version 0.2.0 release notes
 
 * Bumped minor version number because broke backward compatibility
-  * Module now returns __{ server: server }__ instead of just __server__.
+* Module now returns __{ server: server }__ instead of just __server__.
 * Added get url test
 * Added additional error handling
 
