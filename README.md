@@ -342,7 +342,7 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 
 ## Version History
 
-#### Version 0.4.0
+#### Version 0.4.1
 
 * Bumped version number because broke backward compatibility
 * Instead of options.service { parameters } not just pass on options { parameters }
