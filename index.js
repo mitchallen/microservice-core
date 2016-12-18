@@ -15,12 +15,14 @@ let router = new express.Router();
 
 module.exports.Service = function (spec) {
 
-    let service = spec.service;
+    spec = spec || {};
 
-    let info = {
-        router: router,
-        connection: spec.connection
-    };
+    var name = spec.name,
+        version = spec.version,
+        verbose = spec.verbose,
+        port = spec.port,
+        apiVersion = spec.apiVersion,
+        method = spec.method;
 
     // Parse: application/json
     app.use(parser.json());
@@ -30,17 +32,24 @@ module.exports.Service = function (spec) {
 
     router.stack = [];
 
-    app.use(service.apiVersion, service.method(info));
+    var info = Object.assign(
+        spec,
+        {
+            router: router
+        }
+    );
+
+    app.use(apiVersion, method(info));
 
     let server = app.listen(
-        service.port,
+        port,
         function () {
-            if (service.verbose) {
+            if (verbose) {
                 console.log(
                     "%s, %s: listening on port %s",
-                    service.name,
-                    service.version,
-                    service.port
+                    name,
+                    version,
+                    port
                 );
             }
         }
@@ -48,9 +57,9 @@ module.exports.Service = function (spec) {
         if (err.errno === 'EADDRINUSE') {
             console.error(
                 "### ERROR: %s, %s: port %s in use",
-                service.name,
-                service.version,
-                err.port
+                name,
+                version,
+                port
             );
         }
     });

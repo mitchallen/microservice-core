@@ -47,16 +47,15 @@ describe('microservice core smoke test', function() {
     it('should not throw an error', function(done) {
 
         var options = {
-            service: {
-                name: testName,
-                version: testVersion,
-                verbose: verbose,
-                port: testPort,
-                apiVersion: "/test1",
-                method: function(info) {
-                    var router = info.router;
-                    return router;
-                }
+            name: testName,
+            version: testVersion,
+            verbose: verbose,
+            port: testPort,
+            apiVersion: "/test1",
+            method: function(info) {
+                console.log(info);
+                var router = info.router;
+                return router;
             }
         };
     
@@ -71,16 +70,14 @@ describe('microservice core smoke test', function() {
    it('should fail gracefully if port in use', function(done) {
 
         var options = {
-            service: {
-                name: testName,
-                version: testVersion,
-                verbose: verbose,
-                port: testPort,
-                apiVersion: "/test1",
-                method: function(info) {
-                    var router = info.router;
-                    return router;
-                }
+            name: testName,
+            version: testVersion,
+            verbose: verbose,
+            port: testPort,
+            apiVersion: "/test1",
+            method: function(info) {
+                var router = info.router;
+                return router;
             }
         };
         
@@ -102,23 +99,21 @@ describe('microservice core smoke test', function() {
         let dataStatus = "OK";
 
         var options = {
-            service: {
-                name: testName,
-                version: testVersion,
-                verbose: verbose,
-                port: testPort,
-                apiVersion: "/test1",
-                method: function (info) {
-                    var router = info.router;
-                    router.get('/heartbeat', function (req, res) {
-                        var data = {
-                            type: dataType,
-                            status: dataStatus,
-                        };
-                        res.json(data);
-                    });
-                    return router;
-                }
+            name: testName,
+            version: testVersion,
+            verbose: verbose,
+            port: testPort,
+            apiVersion: "/test1",
+            method: function (info) {
+                var router = info.router;
+                router.get('/heartbeat', function (req, res) {
+                    var data = {
+                        type: dataType,
+                        status: dataStatus,
+                    };
+                    res.json(data);
+                });
+                return router;
             }
         };
         
