@@ -47,9 +47,9 @@ This core module can be used as a basis for a simple REST microservice or extend
 
 It works by letting you wrap an __[ExpressJS](https://expressjs.com) router__ HTTP method in a service object and passing that to the core object. The core object does all the work of setting up ExpressJS and lets you just worry about the one microservice. 
 
-### Define a Service Object
+### Define Service Object Options
 
-    var service = {
+    var options = {
     	name: ...,
     	version: ...,
     	verbose: ...,
@@ -165,15 +165,17 @@ To give you and idea of how it works, this is what a dynamo module could look li
         docClient: new AWS.DynamoDB.DocumentClient()
       };
 
-      let options = {
-        service: spec,
-        connection: connection
-     };
+      let options = Object.assign{
+        spec,
+        {
+        	connection: connection
+        }
+      });
 
       return core.Service(options);
     };
     
-The original service object (passed into the constructor as __spec__) is added to the __options__ object to pass to the core.  But the __connection__ property is also filled with information specific to the Amazon Dynamo connection so that your method can also use that.
+The original service object (passed into the constructor as __spec__) is added passed to the core.  But the __connection__ property is also added with information specific to the Amazon Dynamo connection so that your method can also use that.
 
 ##### return value
 
@@ -181,14 +183,6 @@ Finally, your method must return the router that it was passed. That's because i
 
 * * *
     
-### Attach the Service Object to an Option Object
-
-The name on the left must be called __service__.
-
-    var options = {
-    	service: service
-    }
-
 ### Pass the Options to the __Service__ method:
 
     core.Service(options);
@@ -247,7 +241,7 @@ Cut and paste the contents below into it.
     var core = require('@mitchallen/microservice-core');
 
     // Define a Service object
-    var service = {
+    var options = {
 
       // Get the name and version from package.json
       name: require("./package").name,
@@ -286,12 +280,6 @@ Cut and paste the contents below into it.
         // Return the router (required).
         return router;
       }
-    };
-
-    // Create an options object
-    var options = {
-      // Add the service object to the options object
-      service: service
     };
 
     // Pass the options to Service
@@ -353,6 +341,12 @@ Add unit tests for any new or changed functionality. Lint and test your code.
 * * *
 
 ## Version History
+
+#### Version 0.4.0
+
+* Bumped version number because broke backward compatibility
+* Instead of options.service { parameters } not just pass on options { parameters }
+* All parameters are now passed to the method, along with a new router and anything else that may have been added by wrapping modules.
 
 #### Version 0.3.1
 
